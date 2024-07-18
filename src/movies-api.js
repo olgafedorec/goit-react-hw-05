@@ -9,7 +9,7 @@ const options = {
 }
 
 export const getMovies = async () => {
-    const response = await axios.get('movie/popular?language=en-US', options);
+    const response = await axios.get('trending/movie/day', options);
     return response.data;
 };
 
@@ -27,6 +27,14 @@ export const getMovieReviews = async (movieId) => {
 export const getMovieCast = async (movieId) => {
     const response = await axios.get(`/movie/${movieId}/credits`, options);
     return response.data;
+}
+
+export const searchMovie = async (query) => {
+    const response = await axios.get('search/movie', {
+        params: { query },
+        ...options
+    });
+    return response.data.results;
 }
 
 

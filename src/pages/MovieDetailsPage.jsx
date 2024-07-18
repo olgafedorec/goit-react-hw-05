@@ -1,26 +1,39 @@
-import { useParams, NavLink, Outlet } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useParams, NavLink, Outlet, useLocation, Link } from 'react-router-dom';
+import { useEffect, useState, Suspense } from 'react';
+import toast from 'react-hot-toast';
+import Loader from '../components/Loader/Loader';
+import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
 import { getMovieById } from '../movies-api';
 import MovieDetails from '../components/MovieDetails/MovieDetails';
-
-
-//не забути зробити loader і error
 
 export default function MovieDetailsPage() {
 const { movieId } = useParams();
 const [movie, setMovie] = useState(null);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(false);
+const location = useLocation(); 
 
 useEffect(() => {
  async function fetchMovies() {
     try{
+        setLoading(true);
+        setError(false);
         const data = await getMovieById(movieId);
         setMovie(data);
-    } catch(error) {console.error("Failed to fetch movie details", error);}
+    } catch(error) {
+        toast.error('Oops! There was an error? please reload this page!')
+        setError(true);
+    } finally {
+        setLoading(false); 
+     }
  }
 
  fetchMovies();
 
 }, [movieId])
+
+const backLinkHref = location.state?.from ?? "/";
+const navLinkStyle = {color: "black",};
 
     return (
         <div style={
@@ -28,19 +41,30 @@ useEffect(() => {
                 marginTop: 12,
             }
         }>
+            {error && <ErrorMessage/>}
+            {loading && <Loader/>} 
+            <button >
+                <Link style={
+                    {
+                    textDecoration: "none",
+                    color: "black",
+                    }
+                     } to={backLinkHref}>Go back</Link>
+            </button>
        {movie && <MovieDetails movie={movie}/>}
-
        <ul>
         <li>
-            <NavLink to="cast">Cast</NavLink>
+            <NavLink style={navLinkStyle} to="cast" state={{ from: backLinkHref}}>Cast</NavLink>
 
         </li>
         <li>
-            <NavLink to="reviews">Reviews</NavLink>
+            <NavLink style={navLinkStyle} to="reviews" state={{ from: backLinkHref}}>Reviews</NavLink>
         
         </li>
        </ul>
-       <Outlet/>
+       <Suspense fallback={<Loader/>}>
+         <Outlet/>
+       </Suspense>
         </div> 
     )
 }
