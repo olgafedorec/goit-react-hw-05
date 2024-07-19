@@ -1,5 +1,5 @@
-import { useParams, NavLink, Outlet, useLocation, Link } from 'react-router-dom';
-import { useEffect, useState, Suspense } from 'react';
+import { useParams, NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { useEffect, useState, Suspense, useRef } from 'react';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader/Loader';
 import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
@@ -11,7 +11,9 @@ const { movieId } = useParams();
 const [movie, setMovie] = useState(null);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState(false);
-const location = useLocation(); 
+const location = useLocation();
+const navLinkStyle = {color: "black",};
+const backLinkRef = useRef(location.state ?? "/")
 
 useEffect(() => {
  async function fetchMovies() {
@@ -32,9 +34,6 @@ useEffect(() => {
 
 }, [movieId])
 
-const backLinkHref = location.state?.from ?? "/";
-const navLinkStyle = {color: "black",};
-
     return (
         <div style={
             {
@@ -49,16 +48,16 @@ const navLinkStyle = {color: "black",};
                     textDecoration: "none",
                     color: "black",
                     }
-                     } to={backLinkHref}>Go back</Link>
+                     } to={backLinkRef.current}>Go back</Link>
             </button>
        {movie && <MovieDetails movie={movie}/>}
        <ul>
         <li>
-            <NavLink style={navLinkStyle} to="cast" state={{ from: backLinkHref}}>Cast</NavLink>
+            <NavLink style={navLinkStyle} to="cast" >Cast</NavLink>
 
         </li>
         <li>
-            <NavLink style={navLinkStyle} to="reviews" state={{ from: backLinkHref}}>Reviews</NavLink>
+            <NavLink style={navLinkStyle} to="reviews" >Reviews</NavLink>
         
         </li>
        </ul>

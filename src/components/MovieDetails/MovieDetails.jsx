@@ -1,12 +1,13 @@
+
 import css from './MovieDetails.module.css';
 
-export default function MovieDetails({ movie }) {
 
+export default function MovieDetails({ movie }) {
+   
   return (
-        <div>
-          
+        <div>  
         <div className={css.info}>
-        <img src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
+        <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} />
        <div className={css.details}>
        <h3>{movie.title}</h3>
         <h4>Genres:</h4>

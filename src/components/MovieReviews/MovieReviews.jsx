@@ -5,7 +5,7 @@ import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { getMovieReviews } from '../../movies-api';
 
-export default function MovieReview() {
+export default function MovieReviews() {
     const { movieId } = useParams();
     const [reviews, setReviews] = useState([]); 
     const [loading, setLoading] = useState(false);

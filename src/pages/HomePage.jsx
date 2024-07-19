@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// import { useLocation } from 'react-router-dom';
 import { getMovies } from '../movies-api';
 import Loader from '../components/Loader/Loader';
 import toast from 'react-hot-toast';
@@ -9,6 +10,7 @@ export default function HomePage(){
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    // const location = useLocation();
     
     useEffect(() => {
       async function fetchMovies() {

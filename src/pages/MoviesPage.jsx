@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Loader from '../components/Loader/Loader';
 import toast from 'react-hot-toast';
@@ -14,11 +14,9 @@ export default function MoviesPage(){
   const [searchParams, setSearchParams] = useSearchParams();
   const titleFilter = searchParams.get("original_title") ?? "";
   
-  
   const changeMovieFilter = async (newTitle) => {
     searchParams.set("original_title", newTitle);
     setSearchParams(searchParams);
-   
   }
   
   useEffect(() => {
@@ -49,20 +47,10 @@ export default function MoviesPage(){
       <TitleFilter  onFilter={changeMovieFilter} />
       {loading && <Loader/>}
       {movies.length > 0 && (
-        <MovieList movies={movies}>
-          {movies.map(movie => (
-            <li key={movie.id}>
-              <Link 
-                to={`/movies/${movie.id}`} 
-                state={{ from: { pathname: "/movies", search: `?original_title=${titleFilter}` } }}
-              >
-                {movie.title}
-              </Link>
-            </li>
-          ))}
-        </MovieList>
-      )}
-      </div>
+        <MovieList movies={movies} />
+          )
+        }
+      </div> 
   )
   }  
 
